@@ -15,16 +15,24 @@ steps:
     versionSpec: '14.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
-  displayName: 'npm install and build'
+# - script: |
+#     npm install
+#   displayName: 'npm install and build'
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+  inputs:
+    Contents: |
+      app/**
+      config/**
+      package-lock.json
+    TargetFolder: 'veracode-scan'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    rootFolderOrFile: 'veracode-scan'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
     replaceExistingArchive: true
     verbose: true
    
